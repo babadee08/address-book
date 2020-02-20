@@ -188,7 +188,7 @@ class Address
     public function getBirthday()
     {
         if (!is_null($this->birthday)) {
-            return $this->birthday; //->format('Y-m-d');
+            return $this->birthday;
         }
         return $this->birthday;
     }

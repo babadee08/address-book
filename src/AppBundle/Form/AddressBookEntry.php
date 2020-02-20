@@ -26,6 +26,7 @@ class AddressBookEntry extends AbstractType
             ->add('email')
             ->add('photo', FileType::class, [
                 'required' => false,
+                'data_class' => null,
                 'mapped' => false,
                 'constraints' => [
                     new File([
@@ -39,7 +40,7 @@ class AddressBookEntry extends AbstractType
                     ])
                 ]
             ])
-            ->add('Save Address', SubmitType::class, ['label' => 'Create Address', 'attr' => ['class' => 'btn btn-primary']]);
+            ->add('save', SubmitType::class, ['label' => 'Save', 'attr' => ['class' => 'btn-primary']]);
 
     }
 

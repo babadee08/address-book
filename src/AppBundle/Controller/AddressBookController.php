@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Address;
 use AppBundle\Form\AddressBookEntry;
+use AppBundle\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,9 +26,10 @@ class AddressBookController extends Controller
     /**
      * @Route("/address/create", name="createAddress")
      * @param Request $request
+     * @param FileUploader $fileUploader
      * @return RedirectResponse|Response
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, FileUploader $fileUploader)
     {
         $form = $this->createForm(AddressBookEntry::class);
 
@@ -38,14 +40,7 @@ class AddressBookController extends Controller
             $file =  $form['photo']->getData();
             $newFileName = '';
             if ($file) {
-                $actualFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFileName = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $actualFileName);
-                $newFileName = $safeFileName.'-'.uniqid().'.'.$file->guessExtension();
-                try {
-                    $file->move($this->getParameter('images_directory'), $newFileName);
-                } catch (FileException $ex) {
-
-                }
+                $newFileName = $fileUploader->upload($file);
             }
             $address = $form->getData();
             if ($newFileName !== '') {
@@ -77,48 +72,51 @@ class AddressBookController extends Controller
      * @Route("/address/{id}/edit", name="editAddress")
      * @param Request $request
      * @param Address $address
+     * @param FileUploader $fileUploader
      * @return Response
      */
-    public function edit(Request $request, Address $address)
+    public function edit(Request $request, Address $address, FileUploader $fileUploader)
     {
         $form = $this->createForm(AddressBookEntry::class, $address);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
 
             $file =  $form['photo']->getData();
             $newFileName = '';
             if ($file) {
-                $actualFileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFileName = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $actualFileName);
-                $newFileName = $safeFileName.'-'.uniqid().'.'.$file->guessExtension();
-                try {
-                    $file->move($this->getParameter('images_directory'), $newFileName);
-                } catch (FileException $ex) {
-
-                }
+                $newFileName = $fileUploader->upload($file);
             }
 
             $address = $form->getData();
             if ($newFileName !== '') {
                 $address->setPhoto($newFileName);
             }
+
+            print_r($form->getData());
             $em = $this->getDoctrine()->getManager();
             $em->persist($address);
             $em->flush();
 
             $this->addFlash('success', 'Address updated!');
+            return $this->redirect('/');
         }
         return $this->render('address-book/edit.html.twig', ['addressEntry' => $form->createView()]);
     }
 
     /**
      * @Route("/address/delete/{id}", name="deleteAddress")
-     * @param int $id
+     * @param Address $address
      * @return RedirectResponse
      */
-    public function destroy(int $id)
+    public function destroy(Address $address)
     {
         // deletes an address from the database
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($address);
+        $em->flush();
+        $this->addFlash('success', 'Address Deleted!');
         return $this->redirect("/");
     }
 }

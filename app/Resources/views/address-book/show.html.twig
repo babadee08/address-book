@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="starter-template">
+    </div>
+    <div class="row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Address</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Label</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Full Name</td>
+                                        <td>{{ address.firstName }} {{ address.lastName }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Street</td>
+                                        <td>{{ address.street }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Zip Code</td>
+                                        <td>{{ address.zip }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>City</td>
+                                        <td>{{ address.city }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Country</td>
+                                        <td>{{ address.country }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Street</td>
+                                        <td>{{ address.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Street</td>
+                                        <td>{{ address.phoneNumber }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Birthday</td>
+                                        <td>{{ address.birthday|date("Y-m-d", false) }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-xs-4">
+                            <img src="{{ asset('uploads/images/' ~ address.photo) }}" alt="{{ address.photo }}" class="img-rounded">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2"></div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            padding-top: 50px;
+        }
+
+        .starter-template {
+            padding: 40px 15px;
+            text-align: center;
+        }
+    </style>
+{% endblock %}

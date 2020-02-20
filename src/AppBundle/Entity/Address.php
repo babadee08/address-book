@@ -20,46 +20,55 @@ class Address
     private $id;
 
     /**
+     * @Assert\GreaterThanOrEqual(2)
      * @ORM\Column(type="string")
      */
     private $firstName;
 
     /**
+     * @Assert\GreaterThanOrEqual(2)
      * @ORM\Column(type="string")
      */
     private $lastName;
 
     /**
+     * @Assert\GreaterThanOrEqual(5)
      * @ORM\Column(type="string")
      */
     private $street;
 
     /**
+     * @Assert\GreaterThanOrEqual(3)
      * @ORM\Column(type="string")
      */
     private $zip;
 
     /**
+     * @Assert\GreaterThan(2)
      * @ORM\Column(type="string")
      */
     private $city;
 
     /**
+     * @Assert\Country()
      * @ORM\Column(type="string")
      */
     private $country;
 
     /**
+     * @Assert\GreaterThanOrEqual(6)
      * @ORM\Column(type="string")
      */
     private $phoneNumber;
 
     /**
+     * @Assert\Date()
      * @ORM\Column(type="date")
      */
     private $birthday;
 
     /**
+     * @Assert\Email()
      * @ORM\Column(type="string")
      */
     private $email;
@@ -183,6 +192,7 @@ class Address
     }
 
     /**
+     * @Assert\Date()
      * @return mixed
      */
     public function getBirthday()

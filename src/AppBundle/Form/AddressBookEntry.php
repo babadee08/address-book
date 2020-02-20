@@ -4,11 +4,12 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Address;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\File;
 
 class AddressBookEntry extends AbstractType
@@ -22,7 +23,7 @@ class AddressBookEntry extends AbstractType
             ->add('city')
             ->add('country')
             ->add('phoneNumber')
-            ->add('birthday', DateTimeType::class, ['widget' => 'single_text'])
+            ->add('birthday', DateType::class, ['widget' => 'single_text'])
             ->add('email')
             ->add('photo', FileType::class, [
                 'required' => false,

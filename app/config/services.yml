@@ -33,7 +33,5 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
-    # AppBundle\Service\AddressBookService:
-    #     arguments: ['@doctrine.orm.entity_manager']
     AppBundle\Service\FileUploader:
         $targetDirectory: '%images_directory%'

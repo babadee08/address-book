@@ -6,7 +6,7 @@ use AppBundle\Entity\Address;
 use AppBundle\Form\AddressBookEntry;
 use AppBundle\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,19 +36,8 @@ class AddressBookController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // dump($form->getData());die;
-            $file =  $form['photo']->getData();
-            $newFileName = '';
-            if ($file) {
-                $newFileName = $fileUploader->upload($file);
-            }
-            $address = $form->getData();
-            if ($newFileName !== '') {
-                $address->setPhoto($newFileName);
-            }
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($address);
-            $em->flush();
+
+            $this->processRequest($fileUploader, $form);
 
             $this->addFlash('success', 'Address created!');
             return $this->redirect('/');
@@ -83,21 +72,7 @@ class AddressBookController extends Controller
 
         if ($form->isSubmitted()) {
 
-            $file =  $form['photo']->getData();
-            $newFileName = '';
-            if ($file) {
-                $newFileName = $fileUploader->upload($file);
-            }
-
-            $address = $form->getData();
-            if ($newFileName !== '') {
-                $address->setPhoto($newFileName);
-            }
-
-            print_r($form->getData());
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($address);
-            $em->flush();
+            $this->processRequest($fileUploader, $form);
 
             $this->addFlash('success', 'Address updated!');
             return $this->redirect('/');
@@ -118,5 +93,27 @@ class AddressBookController extends Controller
         $em->flush();
         $this->addFlash('success', 'Address Deleted!');
         return $this->redirect("/");
+    }
+
+    /**
+     * @param Address $address
+     * @param FileUploader $fileUploader
+     * @param FormInterface $form
+     */
+    private function processRequest(FileUploader $fileUploader, FormInterface $form): void
+    {
+        $file = $form['photo']->getData();
+        $newFileName = '';
+        if ($file) {
+            $newFileName = $fileUploader->upload($file);
+        }
+
+        $address = $form->getData();
+        if ($newFileName !== '') {
+            $address->setPhoto($newFileName);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($address);
+        $em->flush();
     }
 }

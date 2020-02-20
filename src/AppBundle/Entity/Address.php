@@ -20,31 +20,56 @@ class Address
     private $id;
 
     /**
-     * @Assert\GreaterThanOrEqual(2)
+     * @Assert\Length(
+     *     min=2,
+     *     max=50,
+     *     minMessage="Your first name must be at least {{ limit }} characters",
+     *     maxMessage="Your first name cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string")
      */
     private $firstName;
 
     /**
-     * @Assert\GreaterThanOrEqual(2)
+     * @Assert\Length(
+     *     min=2,
+     *     max=50,
+     *     minMessage="Your Last name must be at least {{ limit }} characters",
+     *     maxMessage="Your Last name cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string")
      */
     private $lastName;
 
     /**
-     * @Assert\GreaterThanOrEqual(5)
+     * @Assert\Length(
+     *     min=2,
+     *     max=255,
+     *     minMessage="Your Street address must be at least {{ limit }} characters",
+     *     maxMessage="Your Street address cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string")
      */
     private $street;
 
     /**
-     * @Assert\GreaterThanOrEqual(3)
+     * @Assert\Length(
+     *     min=2,
+     *     max=10,
+     *     minMessage="Your Zip code must be at least {{ limit }} characters",
+     *     maxMessage="Your Zip code cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string")
      */
     private $zip;
 
     /**
-     * @Assert\GreaterThan(2)
+     * @Assert\Length(
+     *     min=2,
+     *     max=255,
+     *     minMessage="Your City name must be at least {{ limit }} characters",
+     *     maxMessage="Your City name cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(type="string")
      */
     private $city;
@@ -56,7 +81,12 @@ class Address
     private $country;
 
     /**
-     * @Assert\GreaterThanOrEqual(6)
+     * @Assert\Length(
+     *     min=6,
+     *     max=15,
+     *     minMessage="Your Phone number must be at least {{ limit }} digits",
+     *     maxMessage="Your Phone number cannot be longer than {{ limit }} digits"
+     * )
      * @ORM\Column(type="string")
      */
     private $phoneNumber;

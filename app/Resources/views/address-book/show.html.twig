@@ -53,6 +53,10 @@
                                         <td>Birthday</td>
                                         <td>{{ address.birthday|date("Y-m-d", false) }}</td>
                                     </tr>
+                                    <tr>
+                                        <td><a href="{{ path('editAddress', {'id': address.id}) }}" class="btn btn-primary">Edit</a></td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

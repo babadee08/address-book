@@ -15,6 +15,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class AddressBookController extends Controller
 {
     /**
+     * @var FileUploader
+     */
+    private $fileUploader;
+
+    /**
+     * AddressBookController constructor.
+     * @param FileUploader $fileUploader
+     */
+    public function __construct(FileUploader $fileUploader)
+    {
+        $this->fileUploader = $fileUploader;
+    }
+
+    /**
      * @Route("/", name="homepage")
      */
     public function listAction()
@@ -26,10 +40,9 @@ class AddressBookController extends Controller
     /**
      * @Route("/address/create", name="createAddress")
      * @param Request $request
-     * @param FileUploader $fileUploader
      * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, FileUploader $fileUploader)
+    public function createAction(Request $request)
     {
         $form = $this->createForm(AddressBookEntry::class);
 
@@ -37,7 +50,7 @@ class AddressBookController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->processRequest($fileUploader, $form);
+            $this->processRequest($form);
 
             $this->addFlash('success', 'Address created!');
             return $this->redirect('/');
@@ -61,10 +74,9 @@ class AddressBookController extends Controller
      * @Route("/address/{id}/edit", name="editAddress")
      * @param Request $request
      * @param Address $address
-     * @param FileUploader $fileUploader
      * @return Response
      */
-    public function edit(Request $request, Address $address, FileUploader $fileUploader)
+    public function edit(Request $request, Address $address)
     {
         $form = $this->createForm(AddressBookEntry::class, $address);
 
@@ -72,7 +84,7 @@ class AddressBookController extends Controller
 
         if ($form->isSubmitted()) {
 
-            $this->processRequest($fileUploader, $form);
+            $this->processRequest($form);
 
             $this->addFlash('success', 'Address updated!');
             return $this->redirect('/');
@@ -96,16 +108,14 @@ class AddressBookController extends Controller
     }
 
     /**
-     * @param Address $address
-     * @param FileUploader $fileUploader
      * @param FormInterface $form
      */
-    private function processRequest(FileUploader $fileUploader, FormInterface $form): void
+    private function processRequest(FormInterface $form): void
     {
         $file = $form['photo']->getData();
         $newFileName = '';
         if ($file) {
-            $newFileName = $fileUploader->upload($file);
+            $newFileName = $this->fileUploader->upload($file);
         }
 
         $address = $form->getData();
